@@ -13,14 +13,8 @@
 
 namespace rlbox::detail {
 
-template<typename T, typename T_Sbx, typename T_Enable = void>
-struct convert_to_sandbox_equivalent_helper;
-
 template<typename T, typename T_Sbx>
-struct convert_to_sandbox_equivalent_helper<
-  T,
-  T_Sbx,
-  std::enable_if_t<!std::is_class_v<T>>>
+struct convert_to_sandbox_equivalent_helper
 {
   using type = typename rlbox_sandbox<
     T_Sbx>::template convert_to_sandbox_equivalent_nonclass_t<T>;
@@ -51,11 +45,8 @@ struct markerStruct
                                                                                \
   /* add convert_to_sandbox_equivalent_t specialization for new struct */      \
   namespace detail {                                                           \
-    template<typename T_Template, typename T_Sbx>                              \
-    struct convert_to_sandbox_equivalent_helper<                               \
-      T_Template,                                                              \
-      T_Sbx,                                                                   \
-      std::enable_if_t<std::is_same_v<T_Template, T>>>                         \
+    template<typename T_Sbx>                                                   \
+    struct convert_to_sandbox_equivalent_helper<T, T_Sbx>                      \
     {                                                                          \
       using type = Sbx_##libId##_##T<T_Sbx>;                                   \
     };                                                                         \
